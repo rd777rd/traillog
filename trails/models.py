@@ -1,9 +1,21 @@
 from datetime import date
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum, Count
 from django.urls import reverse
+
+TWO_PLACES = Decimal("0.01")
+
+
+def _clean_miles(value):
+    """SQLite's Sum() over a DecimalField round-trips through floating point,
+    so aggregated totals can come back as e.g. Decimal('7.20000000000004').
+    Quantize back to the field's real precision (2 decimal places)."""
+    if value is None:
+        return Decimal("0.00")
+    return Decimal(value).quantize(TWO_PLACES, rounding=ROUND_HALF_UP)
 
 
 class Hike(models.Model):
@@ -74,7 +86,7 @@ def user_stats(user):
         total_elevation=Sum("elevation_gain_ft"),
         total_hikes=Count("id"),
     )
-    total_miles = totals["total_miles"] or 0
+    total_miles = _clean_miles(totals["total_miles"])
     total_elevation = totals["total_elevation"] or 0
     total_hikes = totals["total_hikes"] or 0
 
@@ -82,6 +94,7 @@ def user_stats(user):
     year_totals = this_year.aggregate(
         miles=Sum("distance_miles"), hikes=Count("id")
     )
+    year_miles = _clean_miles(year_totals["miles"])
 
     badges = []
     for threshold in MILE_BADGES:
@@ -98,7 +111,7 @@ def user_stats(user):
         "total_miles": total_miles,
         "total_elevation": total_elevation,
         "total_hikes": total_hikes,
-        "year_miles": year_totals["miles"] or 0,
+        "year_miles": year_miles,
         "year_hikes": year_totals["hikes"] or 0,
         "badges": badges,
     }

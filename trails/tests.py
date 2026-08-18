@@ -199,6 +199,18 @@ class StatsAndBadgeTests(TestCase):
         self.assertEqual(stats["total_miles"], 0)
         self.assertEqual(stats["total_hikes"], 0)
 
+    def test_miles_totals_are_clean_decimals_not_float_noise(self):
+        # SQLite's Sum() over a DecimalField round-trips through floating point
+        # and can produce e.g. Decimal('7.20000000000004') — regression check
+        # for a real bug found via a live smoke test.
+        Hike.objects.create(
+            owner=self.user, trail_name="A", date_hiked=date.today(),
+            distance_miles="7.2", elevation_gain_ft=1800,
+        )
+        stats = user_stats(self.user)
+        self.assertEqual(str(stats["total_miles"]), "7.20")
+        self.assertEqual(str(stats["year_miles"]), "7.20")
+
     def test_year_scoped_stats(self):
         Hike.objects.create(
             owner=self.user, trail_name="This year", date_hiked=date.today(),
