@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  {% include "trails/partials/_mountain_hero.html" %}
+  <div class="hero-copy">
+    <h1>Every trail, remembered.</h1>
+    <p class="lede">TrailLog is a personal hiking journal. Log the trail, the miles, the
+      climb — and watch a lifetime of stats build itself, one hike at a time.</p>
+    <div class="hero-actions">
+      <a href="{% url 'signup' %}" class="btn btn-accent">Start your journal — free</a>
+      <a href="{% url 'login' %}" class="btn btn-outline">Log in</a>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="wrap feature-grid">
+    <div class="feature-card">
+      {% include "trails/partials/_profile_easy.html" %}
+      <h3>Log it in seconds</h3>
+      <p>Trail name, distance, elevation gain, difficulty, a quick rating and notes.
+        No GPS watch required.</p>
+    </div>
+    <div class="feature-card">
+      {% include "trails/partials/_profile_moderate.html" %}
+      <h3>Lifetime stats, automatically</h3>
+      <p>Total miles, total elevation climbed, hikes this year — all computed from your
+        log, no spreadsheet math.</p>
+    </div>
+    <div class="feature-card">
+      {% include "trails/partials/_profile_strenuous.html" %}
+      <h3>Earn milestone badges</h3>
+      <p>Cross 10 miles, 5,000 feet climbed, or your 10th hike and TrailLog marks the
+        moment.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="wrap">
+    <h2>Your next hike deserves a record.</h2>
+    <p>Free, no ads, and it takes less time to log a hike than to tie your boots.</p>
+    <a href="{% url 'signup' %}" class="btn btn-accent">Create your account</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{{ hike.trail_name }} — TrailLog{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="hike-detail-head">
+    <div>
+      <h1 style="font-size:2rem;">{{ hike.trail_name }}</h1>
+      <p class="hike-meta">{% if hike.location %}{{ hike.location }} &middot; {% endif %}{{ hike.date_hiked|date:"F j, Y" }}</p>
+    </div>
+    <span class="difficulty-pill difficulty-{{ hike.difficulty }}">{{ hike.get_difficulty_display }}</span>
+  </div>
+
+  <div class="hike-detail-grid">
+    <div class="detail-card">
+      {% include "trails/partials/_profile_"|add:hike.difficulty|add:".html" %}
+      <div class="stat-grid" style="grid-template-columns: repeat(3,1fr); margin-top:16px;">
+        <div class="stat-tile">
+          <span class="stat-value">{{ hike.distance_miles }}</span>
+          <span class="stat-label">Miles</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-value">{{ hike.elevation_gain_ft }}</span>
+          <span class="stat-label">Ft Gain</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-value">{{ hike.duration_display|default:"—" }}</span>
+          <span class="stat-label">Duration</span>
+        </div>
+      </div>
+      {% if hike.notes %}
+        <h3 style="margin-top:24px;">Notes</h3>
+        <p>{{ hike.notes|linebreaks }}</p>
+      {% endif %}
+    </div>
+    <div class="detail-card">
+      <h3>Your rating</h3>
+      <p class="stars">{% for _ in hike.stars_filled %}&#9733;{% endfor %}{% for _ in hike.stars_empty %}&#9734;{% endfor %}</p>
+      <div class="detail-actions">
+        <a href="{% url 'hike_edit' hike.pk %}" class="btn btn-outline btn-small">Edit</a>
+        <form method="post" action="{% url 'hike_delete' hike.pk %}" onsubmit="return confirm('Delete this hike? This cannot be undone.');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-small">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

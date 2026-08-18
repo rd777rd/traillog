@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — TrailLog{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="dashboard-head">
+    <h1>Welcome back, {{ request.user.username }}.</h1>
+    <p>Here's your trail record so far.</p>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-tile">
+      <span class="stat-value">{{ stats.total_miles }}</span>
+      <span class="stat-label">Lifetime Miles</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-value">{{ stats.total_elevation|floatformat:0 }} ft</span>
+      <span class="stat-label">Elevation Climbed</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-value">{{ stats.total_hikes }}</span>
+      <span class="stat-label">Total Hikes</span>
+    </div>
+    <div class="stat-tile">
+      <span class="stat-value">{{ stats.year_miles }}</span>
+      <span class="stat-label">Miles This Year</span>
+    </div>
+  </div>
+
+  <h2 style="font-size:1.2rem; text-transform:none; font-family:var(--font-body); font-weight:800; color:var(--sage);">Badges earned</h2>
+  {% if stats.badges %}
+    <div class="badge-rail">
+      {% for badge in stats.badges %}
+        <span class="badge-medal">{% include "trails/partials/_badge_medal.html" %}{{ badge }}</span>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="empty-badges" style="margin-bottom:32px;">Log your first hike to start earning badges.</p>
+  {% endif %}
+
+  <div class="section-heading-row">
+    <h2 style="font-size:1.3rem;">Recent hikes</h2>
+    <a href="{% url 'hike_list' %}">View all hikes &rarr;</a>
+  </div>
+
+  {% if recent_hikes %}
+    <div class="hike-grid">
+      {% for hike in recent_hikes %}
+        {% include "trails/partials/_hike_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No hikes logged yet</h3>
+      <p>Your first entry is one click away.</p>
+      <a href="{% url 'hike_add' %}" class="btn btn-accent">Log your first hike</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

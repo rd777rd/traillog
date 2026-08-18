@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}My Hikes — TrailLog{% endblock %}
+{% block content %}
+<div class="wrap">
+  <div class="dashboard-head">
+    <div class="section-heading-row">
+      <h1 style="font-size:2rem;">My Hikes</h1>
+      <a href="{% url 'hike_add' %}" class="btn btn-accent">Log a Hike</a>
+    </div>
+  </div>
+
+  <form method="get" class="filter-bar">
+    <div class="filter-field">
+      <label for="q">Search</label>
+      <input type="text" id="q" name="q" value="{{ query }}" placeholder="Trail name">
+    </div>
+    <div class="filter-field">
+      <label for="difficulty">Difficulty</label>
+      <select id="difficulty" name="difficulty">
+        <option value="">All</option>
+        {% for value, label in difficulties %}
+          <option value="{{ value }}" {% if value == selected_difficulty %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% if years %}
+    <div class="filter-field">
+      <label for="year">Year</label>
+      <select id="year" name="year">
+        <option value="">All</option>
+        {% for y in years %}
+          <option value="{{ y }}" {% if selected_year == y|stringformat:"s" %}selected{% endif %}>{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    {% endif %}
+    <button type="submit" class="btn btn-outline">Filter</button>
+    {% if selected_difficulty or selected_year or query %}
+      <a href="{% url 'hike_list' %}" class="btn btn-small btn-outline">Clear</a>
+    {% endif %}
+  </form>
+
+  {% if hikes %}
+    <div class="hike-grid" style="margin-top:24px;">
+      {% for hike in hikes %}
+        {% include "trails/partials/_hike_card.html" %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <h3>No hikes match</h3>
+      <p>Try clearing your filters, or log a new hike.</p>
+      <a href="{% url 'hike_add' %}" class="btn btn-accent">Log a Hike</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

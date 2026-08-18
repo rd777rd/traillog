@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /$
+Disallow: /dashboard/
+Disallow: /hikes/
+Disallow: /login/
+Disallow: /signup/
+Disallow: /admin/
+
+Sitemap: https://traillog.onrender.com/sitemap.xml

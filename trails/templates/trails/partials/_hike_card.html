@@ -1,0 +1,12 @@
+<article class="hike-card">
+  <div>
+    <h3><a href="{% url 'hike_detail' hike.pk %}">{{ hike.trail_name }}</a></h3>
+    <p class="hike-meta">{% if hike.location %}{{ hike.location }} &middot; {% endif %}{{ hike.date_hiked|date:"M j, Y" }}</p>
+    <div class="hike-stats-inline">
+      <span><strong>{{ hike.distance_miles }}</strong> mi</span>
+      <span><strong>{{ hike.elevation_gain_ft }}</strong> ft gain</span>
+      {% if hike.duration_display %}<span><strong>{{ hike.duration_display }}</strong></span>{% endif %}
+    </div>
+  </div>
+  <span class="difficulty-pill difficulty-{{ hike.difficulty }}">{{ hike.get_difficulty_display }}</span>
+</article>

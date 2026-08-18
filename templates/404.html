@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Trail not found — TrailLog{% endblock %}
+{% block content %}
+<div class="wrap" style="text-align:center; padding: 72px 24px;">
+  {% include "trails/partials/_profile_hard.html" %}
+  <h1 style="margin-top:24px;">404 — Off Trail</h1>
+  <p class="lede">This path doesn't exist. Let's get you back to the trailhead.</p>
+  <a href="{% url 'landing' %}" class="btn btn-accent">Back to TrailLog</a>
+</div>
+{% endblock %}

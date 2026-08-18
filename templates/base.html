@@ -1,0 +1,67 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}TrailLog — Every trail, remembered{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}TrailLog is a personal hiking journal: log every trail, track lifetime miles and elevation, and watch your stats grow hike by hike.{% endblock %}">
+{% block robots %}{% if request.user.is_authenticated %}<meta name="robots" content="noindex,nofollow">{% endif %}{% endblock %}
+<meta property="og:title" content="TrailLog — Every trail, remembered">
+<meta property="og:description" content="A personal hiking journal for tracking every trail, mile, and foot of elevation you've earned.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=1">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="{% url 'landing' %}">
+      {% include "trails/partials/_compass_mark.html" %}
+      <span class="brand-name">TrailLog</span>
+    </a>
+    <nav class="main-nav" aria-label="Primary">
+      {% if request.user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{% url 'hike_list' %}" class="{% if request.resolver_match.url_name == 'hike_list' %}active{% endif %}">My Hikes</a>
+        <a href="{% url 'hike_add' %}" class="btn btn-accent btn-small">Log a Hike</a>
+        <form method="post" action="{% url 'logout' %}" class="logout-form">
+          {% csrf_token %}
+          <button type="submit" class="link-btn">Log out</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+        <a href="{% url 'signup' %}" class="btn btn-accent btn-small">Start your journal</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+
+{% if messages %}
+<div class="wrap messages">
+  {% for message in messages %}
+    <p class="flash flash-{{ message.tags }}">{{ message }}</p>
+  {% endfor %}
+</div>
+{% endif %}
+
+<main id="main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      {% include "trails/partials/_compass_mark.html" %}
+      <span>TrailLog</span>
+    </div>
+    <p>Built for hikers who want their miles remembered, not lost in a notes app.</p>
+    <p class="footer-fine">&copy; {% now "Y" %} TrailLog. A demo project.</p>
+  </div>
+</footer>
+</body>
+</html>

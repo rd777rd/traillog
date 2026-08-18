@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sign up — TrailLog{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="form-card">
+    <h1 style="font-size:1.8rem;">Start your journal</h1>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="field-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}<p class="help-text">{{ field.help_text }}</p>{% endif %}
+          {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-accent btn-block">Create account</button>
+    </form>
+  </div>
+  <p class="auth-switch">Already logging hikes? <a href="{% url 'login' %}">Log in</a></p>
+</div>
+{% endblock %}
