@@ -26,6 +26,8 @@ body {
   background: var(--cream);
   line-height: 1.55;
   overflow-x: hidden;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 img, svg { max-width: 100%; display: block; }
 a { color: var(--forest); text-decoration: none; }
@@ -177,7 +179,7 @@ p { margin: 0 0 1em; }
   box-shadow: var(--shadow);
 }
 .feature-card h3 { margin-bottom: 0.3em; }
-.feature-card .elevation-profile { color: var(--ember); width: 100%; height: 40px; margin-bottom: 12px; }
+.elevation-profile { color: var(--ember); width: 100%; height: 40px; margin-bottom: 12px; }
 
 .cta-band {
   background: var(--sage);
